@@ -244,7 +244,7 @@ public class TelegramBot extends TelegramLongPollingBot {
                     List<String> list = Arrays.stream(callBackData.split(" ")).toList();
                     Long time = Long.parseLong(list.get(1));
                     Date date = new Date(time);
-                    if (!times.contains(time) && isRecord(chatId).size() == 0) {
+                    if (!times.contains(time) && isRecord(chatId).size() == 0 && time > new Date().getTime()) {
                         System.out.println(date);
                         Record record = new Record();
                         record.setTime(time);
@@ -291,7 +291,7 @@ public class TelegramBot extends TelegramLongPollingBot {
                     Long timeOld = Long.parseLong(list.get(1));
                     Long timeNew = Long.parseLong(list.get(2));
                     Record record = serviceData.findByTime(timeOld).get();
-                    if (record.getClientId().equals(chatId)) {
+                    if (record.getClientId().equals(chatId) && timeNew > new Date().getTime()) {
                         sendMessage(config.getOwnerId(), "Запись отменена: " + record.getTimeInfo() + ". " + record.getClientInfo());
                         serviceData.deleteRecord(timeOld);
                         record.setTime(timeNew);
@@ -308,7 +308,7 @@ public class TelegramBot extends TelegramLongPollingBot {
                     } else {
                         SendMessage sendMessage = new SendMessage();
                         sendMessage.setChatId(String.valueOf(chatId));
-                        sendMessage.setText("Ошибка. На указанное время записан другой человек.");
+                        sendMessage.setText("Извините, данное время уже недоступно.");
                         executeMessage(sendMessage);
                     }
 
