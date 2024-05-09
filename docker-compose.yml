@@ -1,0 +1,17 @@
+version: '3.1'
+
+volumes:
+  tg_bot_clinic:
+
+services:
+  tg_bot_db:
+    image: postgres
+    restart: always
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=admin
+      - POSTGRES_DB=tg-bot-clinic
+    volumes:
+      - tg_bot_clinic:/var/lib/postgresql/data
+    ports:
+      - "127.0.0.1:5433:5432"
